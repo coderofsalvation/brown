@@ -1,11 +1,11 @@
-css2html = require 'css-to-html'
+zen = require 'zen-coding'
 
 module.exports = ( () ->
 
   @.escapes = ["___","___"]
 
   @.jdsl = require 'json-dsl'
-  @.jdsl.parseKey   = (k) -> @.zencode k+'>{%s}'
+  @.jdsl.parseKey   = (k) -> zen k+'>{%s}'
   @.jdsl.parseValue = (v,data) -> 
     result = ''; items = false;
     if v.match /->/
@@ -17,7 +17,7 @@ module.exports = ( () ->
             $2 = @.applyFiltersAndEval $2, item, data 
           else 
             $2 = @.applyFiltersAndEval $2, item, data 
-        itemstr = @.zencode itemstr if v.match />/ 
+        itemstr = zen itemstr if v.match />/ 
         result += itemstr
     else 
       result = v

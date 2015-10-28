@@ -8,7 +8,7 @@ JSON 2 html/xml template engine on steroids
 
 then 
 
-    brown = require 'brown'
+    brown = require('brown').parse
 
     json = 
       'div#foo.flop>fieldset>div>span': 
@@ -29,7 +29,7 @@ then
 
 > NOTE: instead of coffeescript, see the javascript example [here](https://github.com/coderofsalvation/brown/blob/master/test/test.js)
 
-output:
+### output
 
     <div id="foo" class="flop">
       <fieldset>
@@ -76,6 +76,15 @@ output:
 With these basics you can literally do anything. 
 Need more? just use functions and filters. 
 
+# Browser usage 
+
+    <script type='text/javascript' src='brown.min.js'></script>
+    <script>
+      brown = require('brown');
+      html = brown.parse( {"div":"{{foo}}"}, {foo:"bar"} )
+      alert(html);
+    </script>
+
 # nested templates
 
 Want master templates?
@@ -98,7 +107,7 @@ Easy, you can call brown inside brown.
 
 > NOTE: instead of coffeescript, see the javascript example [here](https://github.com/coderofsalvation/brown/blob/master/test/mastertemplate.js)
 
-output:    
+### output    
 
     <html><head></head><body><div id="main"><ul id="menu"><div>hello world</div></ul></div></body></html></body></head></html>    
 
@@ -106,7 +115,7 @@ output:
 
 Arrays here you go
 
-      'div':
+      div:
         ul: 'arr->li>{ {{.}} }'
         ol: 'arr->{{.|upper}}'
 
@@ -114,15 +123,28 @@ And for objects just reference the keys like so: `{{.keyname}}`
 
 For more info see the info above or the [tests](https://github.com/coderofsalvation/brown/blob/master/test/test.js)
 
-# Browser usage 
+# global functions and filters 
 
-    <script type='text/javascript' src='brown.min.js'></script>
-    <script>
-      brown = require('brown');
-      html = brown.parse( {"div":"{{foo}}"}, {foo:"bar"} )
-      alert(html);
-    </script>
+Easy, just use extend (`npm install extend`).
+
+    global = 
+      somefilter: (str) -> str.toUpperCase()
+      projectname: () -> return "myprojectname"
+
+    unique =
+      welcome: "hello"
+
+    json = 
+      div:
+        span: '{{welcome}} {{projectname()|somefilter}}'
+
+    console.log brown json, extend global, unique
+
+### output
+
+    <div><span>hello MYPROJECTNAME</span></div>
+
 
 # Roadmap
 
-* global functions and filters
+* stability and peace
