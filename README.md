@@ -4,6 +4,12 @@ JSON 2 html/xml template engine on steroids
 
 # Usage 
 
+    $ npm install brown
+
+then 
+
+    brown = require 'brown'
+
     json = 
       'div#foo.flop>fieldset>div>span': 
         ul: 'items->li>a[href="{{.url}}"]>{ {{.label}} }'
