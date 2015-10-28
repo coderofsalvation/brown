@@ -38,7 +38,14 @@
 <h1>
 <a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h1>
 
-<pre><code>json = 
+<pre><code>$ npm install brown
+</code></pre>
+
+<p>then </p>
+
+<pre><code>brown = require 'brown'
+
+json = 
   'div#foo.flop&gt;fieldset&gt;div&gt;span': 
     ul: 'items-&gt;li&gt;a[href="{{.url}}"]&gt;{ {{.label}} }'
   div: 
