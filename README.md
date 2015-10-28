@@ -21,7 +21,7 @@ JSON 2 html/xml template engine on steroids
     
     brown json, data
 
-> NOTE: see the javascript example [here]
+> NOTE: instead of coffeescript, see the javascript example [here](https://github.com/coderofsalvation/brown/blob/master/test/test.js)
 
 output:
 
@@ -90,7 +90,7 @@ Easy, you can call brown inside brown.
 
     brown data.master, data
 
-> NOTE: see the javascript example [here]
+> NOTE: instead of coffeescript, see the javascript example [here](https://github.com/coderofsalvation/brown/blob/master/test/mastertemplate.js)
 
 output:    
 
@@ -106,4 +106,8 @@ Arrays here you go
 
 And for objects just reference the keys like so: `{{.keyname}}`
 
-For more info see the info above or the [tests]()
+For more info see the info above or the [tests](https://github.com/coderofsalvation/brown/blob/master/test/test.js)
+
+# Roadmap
+
+* global functions and filters

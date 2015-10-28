@@ -1,10 +1,10 @@
 {
   "name": "brown",
-  "version": "1.0.1",
-  "description": "hyperfast and minimalistic json2html template engine for nodejs / coffeescript, borrows from emmet and mustache and json-dsl",
+  "version": "1.0.2",
+  "description": "hyperfast and minimalistic json2html template engine for nodejs/coffeescript, a mashup between emmet/mustache/json-dsl/smarty",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 0"
   },
   "repository": {
     "type": "git",
