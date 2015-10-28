@@ -1,0 +1,185 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Brown by coderofsalvation</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1 class="header">Brown</h1>
+        <p class="header">hyperfast and minimalistic json2html template engine for nodejs / coffeescript, a mashup between emmet/mustache/json-dsl/smarty</p>
+
+        <ul>
+          <li class="download"><a class="buttons" href="https://github.com/coderofsalvation/brown/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/coderofsalvation/brown/tarball/master">Download TAR</a></li>
+          <li><a class="buttons github" href="https://github.com/coderofsalvation/brown">View On GitHub</a></li>
+        </ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/coderofsalvation">coderofsalvation</a></p>
+
+
+      </header>
+      <section>
+        <h1>
+<a id="ϐrown" class="anchor" href="#%CF%90rown" aria-hidden="true"><span class="octicon octicon-link"></span></a>ϐrown</h1>
+
+<p>JSON 2 html/xml template engine on steroids</p>
+
+<h1>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h1>
+
+<pre><code>json = 
+  'div#foo.flop&gt;fieldset&gt;div&gt;span': 
+    ul: 'items-&gt;li&gt;a[href="{{.url}}"]&gt;{ {{.label}} }'
+  div: 
+    'span&gt;b.foo': '{{foo}}'
+    'span&gt;b.bar': '{{func()}}'
+    'span&gt;b.pip': '{{foo|upper|important}}'
+
+data = 
+  items: [{label:'one', url:"/"},{label:'two',url:'/two'}]
+  foo: "hello world"
+  func: () -&gt; @.foo + " foobar"
+  upper: (str) -&gt; str.toUpperCase()
+  important: (str) -&gt; "!! "+str
+
+brown json, data
+</code></pre>
+
+<blockquote>
+<p>NOTE: instead of coffeescript, see the javascript example <a href="https://github.com/coderofsalvation/brown/blob/master/test/test.js">here</a></p>
+</blockquote>
+
+<p>output:</p>
+
+<pre><code>&lt;div id="foo" class="flop"&gt;
+  &lt;fieldset&gt;
+    &lt;div&gt;
+      &lt;span&gt;
+        &lt;ul&gt;
+          &lt;li&gt;
+            &lt;a href="/"&gt; one &lt;/a&gt;
+          &lt;/li&gt;
+          &lt;li&gt;
+            &lt;a href="/two"&gt; two &lt;/a&gt;
+          &lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/span&gt;
+    &lt;/div&gt;
+  &lt;/fieldset&gt;
+&lt;/div&gt;
+&lt;div&gt;
+  &lt;span&gt;
+    &lt;b class="foo"&gt;hello world&lt;/b&gt;
+  &lt;/span&gt;
+  &lt;span&gt;
+    &lt;b class="bar"&gt;hello world foobar&lt;/b&gt;
+  &lt;/span&gt;
+  &lt;span&gt;
+    &lt;b class="pipe"&gt;!! HELLO WORLD&lt;/b&gt;
+  &lt;/span&gt;
+&lt;/div&gt;
+</code></pre>
+
+<h1>
+<a id="philosophy" class="anchor" href="#philosophy" aria-hidden="true"><span class="octicon octicon-link"></span></a>Philosophy</h1>
+
+<p>ϐrown wants to be very fast an minimal, therefore uses <a href="https://npmjs.com/packages/json-dsl">json-dsl</a>.
+ϐrown combines ideas from smarty, mustache and emmet/zencoding.
+ϐrown focuses on json and json-portability instead of text (smarty/mustache) or introducing a new syntax which require lexicalscanner/parsertree-bloat (jade,coffeecup,haml etc).</p>
+
+<h1>
+<a id="features" class="anchor" href="#features" aria-hidden="true"><span class="octicon octicon-link"></span></a>Features</h1>
+
+<ul>
+<li>variable substitution using {{variablename}}</li>
+<li>filter chaining using '|'</li>
+<li>functions using {{functionname()}}</li>
+<li>iteration over objects using '-&gt;' and {{.keyname}} </li>
+<li>iteration over arrays using '-&gt;' and {{.}}</li>
+</ul>
+
+<p>With these basics you can literally do anything. 
+Need more? just use functions and filters. </p>
+
+<h1>
+<a id="nested-templates" class="anchor" href="#nested-templates" aria-hidden="true"><span class="octicon octicon-link"></span></a>nested templates</h1>
+
+<p>Want master templates?
+Easy, you can call brown inside brown.</p>
+
+<pre><code>data = 
+  master:
+    html: 
+      head: ''
+      body:
+        'div#main': '{{content()}}'
+  page:
+    'ul#menu':
+      div: "{{foo}}"
+  data:
+    foo: "hello world"
+  content: () -&gt; brown @.page, @.data
+
+brown data.master, data
+</code></pre>
+
+<blockquote>
+<p>NOTE: instead of coffeescript, see the javascript example <a href="https://github.com/coderofsalvation/brown/blob/master/test/mastertemplate.js">here</a></p>
+</blockquote>
+
+<p>output:    </p>
+
+<pre><code>&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;&lt;div id="main"&gt;&lt;ul id="menu"&gt;&lt;div&gt;hello world&lt;/div&gt;&lt;/ul&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;&lt;/body&gt;&lt;/head&gt;&lt;/html&gt;    
+</code></pre>
+
+<h1>
+<a id="traversing-arraysobjects" class="anchor" href="#traversing-arraysobjects" aria-hidden="true"><span class="octicon octicon-link"></span></a>traversing arrays/objects</h1>
+
+<p>Arrays here you go</p>
+
+<pre><code>  'div':
+    ul: 'arr-&gt;li&gt;{ {{.}} }'
+    ol: 'arr-&gt;{{.|upper}}'
+</code></pre>
+
+<p>And for objects just reference the keys like so: <code>{{.keyname}}</code></p>
+
+<p>For more info see the info above or the <a href="https://github.com/coderofsalvation/brown/blob/master/test/test.js">tests</a></p>
+
+<h1>
+<a id="browser-usage" class="anchor" href="#browser-usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Browser usage</h1>
+
+<pre><code>&lt;script type='text/javascript' src='brown.min.js'&gt;&lt;/script&gt;
+&lt;script&gt;
+  brown = require('brown');
+  html = brown.parse( {"div":"{{foo}}"}, {foo:"bar"} )
+  alert(html);
+&lt;/script&gt;
+</code></pre>
+
+<h1>
+<a id="roadmap" class="anchor" href="#roadmap" aria-hidden="true"><span class="octicon octicon-link"></span></a>Roadmap</h1>
+
+<ul>
+<li>global functions and filters</li>
+</ul>
+      </section>
+      <footer>
+        <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
+  </body>
+</html>
