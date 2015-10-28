@@ -55,7 +55,7 @@ output:
 
 # Philosophy
 
-ϐrown wants to be very fast an minimal.
+ϐrown wants to be very fast an minimal, therefore uses [json-dsl](https://npmjs.com/packages/json-dsl).
 ϐrown combines ideas from smarty, mustache and emmet/zencoding.
 ϐrown focuses on json and json-portability instead of text (smarty/mustache) or introducing a new syntax which require lexicalscanner/parsertree-bloat (jade,coffeecup,haml etc).
 
