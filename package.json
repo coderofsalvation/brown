@@ -1,0 +1,38 @@
+{
+  "name": "brown",
+  "version": "1.0.1",
+  "description": "hyperfast and minimalistic json2html template engine for nodejs / coffeescript, borrows from emmet and mustache and json-dsl",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://coderofsalvation@github.com/coderofsalvation/brown.git"
+  },
+  "keywords": [
+    "template",
+    "templates",
+    "engine",
+    "json2html",
+    "json",
+    "to",
+    "html",
+    "html",
+    "markup",
+    "zencoding",
+    "zen",
+    "emmet",
+    "mustache"
+  ],
+  "author": "coderofsalvation",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/coderofsalvation/brown/issues"
+  },
+  "homepage": "https://github.com/coderofsalvation/brown#readme",
+  "dependencies": {
+    "json-dsl": "^1.0.2",
+    "zen-coding": "0.0.3"
+  }
+}
