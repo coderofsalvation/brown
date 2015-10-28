@@ -108,6 +108,15 @@ And for objects just reference the keys like so: `{{.keyname}}`
 
 For more info see the info above or the [tests](https://github.com/coderofsalvation/brown/blob/master/test/test.js)
 
+# Browser usage 
+
+    <script type='text/javascript' src='brown.min.js'></script>
+    <script>
+      brown = require('brown');
+      html = brown.parse( {"div":"{{foo}}"}, {foo:"bar"} )
+      alert(html);
+    </script>
+
 # Roadmap
 
 * global functions and filters

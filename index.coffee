@@ -1,15 +1,15 @@
-zen = require 'zen-coding'
+css2html = require 'css-to-html'
 
 module.exports = ( () ->
 
   @.escapes = ["___","___"]
+
   @.jdsl = require 'json-dsl'
-  @.jdsl.parseKey   = (k) -> zen k+'>{%s}'
+  @.jdsl.parseKey   = (k) -> @.zencode k+'>{%s}'
   @.jdsl.parseValue = (v,data) -> 
     result = ''; items = false;
     if v.match /->/
       items = data[ v.split('->')[0] ]
-      console.dir items 
       v = v.split('->')[1]
       for item in items 
         itemstr = v.replace /(\{\{)(.*?)(\}\})/g, ($0,$1,$2) ->
@@ -17,7 +17,7 @@ module.exports = ( () ->
             $2 = @.applyFiltersAndEval $2, item, data 
           else 
             $2 = @.applyFiltersAndEval $2, item, data 
-        itemstr = zen itemstr if v.match />/ 
+        itemstr = @.zencode itemstr if v.match />/ 
         result += itemstr
     else 
       result = v

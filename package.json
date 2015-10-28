@@ -1,10 +1,11 @@
 {
   "name": "brown",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "hyperfast and minimalistic json2html template engine for nodejs/coffeescript, a mashup between emmet/mustache/json-dsl/smarty",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 0"
+    "web": "/bin/bash -c 'browserify -r .:brown > brown.js'",
+    "webrelease": "/bin/bash -c 'browserify -r .:brown | uglifyjs -c > brown.min.js'"
   },
   "repository": {
     "type": "git",
@@ -33,6 +34,6 @@
   "homepage": "https://github.com/coderofsalvation/brown#readme",
   "dependencies": {
     "json-dsl": "^1.0.2",
-    "zen-coding": "0.0.3"
+    "zen-coding": "coderofsalvation/zen-coding"
   }
 }
