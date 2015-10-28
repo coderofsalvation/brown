@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Brown by coderofsalvation</title>
+    <title>ϐrown by coderofsalvation</title>
 
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/github-light.css">
@@ -16,7 +16,7 @@
   <body>
     <div class="wrapper">
       <header>
-        <h1 class="header">Brown</h1>
+        <h1 class="header">ϐrown</h1>
         <p class="header">hyperfast and minimalistic json2html template engine for nodejs / coffeescript, a mashup between emmet/mustache/json-dsl/smarty</p>
 
         <ul>
@@ -41,9 +41,14 @@
 <pre><code>$ npm install brown
 </code></pre>
 
+<p>or in the browser:</p>
+
+<pre><code>&lt;script type='text/javascript' src='brown.min.js'&gt;&lt;/script&gt;
+</code></pre>
+
 <p>then </p>
 
-<pre><code>brown = require 'brown'
+<pre><code>brown = require('brown').parse
 
 json = 
   'div#foo.flop&gt;fieldset&gt;div&gt;span': 
@@ -67,7 +72,8 @@ brown json, data
 <p>NOTE: instead of coffeescript, see the javascript example <a href="https://github.com/coderofsalvation/brown/blob/master/test/test.js">here</a></p>
 </blockquote>
 
-<p>output:</p>
+<h3>
+<a id="output" class="anchor" href="#output" aria-hidden="true"><span class="octicon octicon-link"></span></a>output</h3>
 
 <pre><code>&lt;div id="foo" class="flop"&gt;
   &lt;fieldset&gt;
@@ -109,7 +115,9 @@ brown json, data
 <a id="features" class="anchor" href="#features" aria-hidden="true"><span class="octicon octicon-link"></span></a>Features</h1>
 
 <ul>
-<li>variable substitution using {{variablename}}</li>
+<li>basic emmet syntax ('a&gt;b' becomes '<b></b>') <a href="http://docs.emmet.io/cheat-sheet/">overview here</a>
+</li>
+<li>mustache variable substitution using {{variablename}}</li>
 <li>filter chaining using '|'</li>
 <li>functions using {{functionname()}}</li>
 <li>iteration over objects using '-&gt;' and {{.keyname}} </li>
@@ -145,7 +153,8 @@ brown data.master, data
 <p>NOTE: instead of coffeescript, see the javascript example <a href="https://github.com/coderofsalvation/brown/blob/master/test/mastertemplate.js">here</a></p>
 </blockquote>
 
-<p>output:    </p>
+<h3>
+<a id="output-1" class="anchor" href="#output-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>output</h3>
 
 <pre><code>&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;&lt;div id="main"&gt;&lt;ul id="menu"&gt;&lt;div&gt;hello world&lt;/div&gt;&lt;/ul&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;&lt;/body&gt;&lt;/head&gt;&lt;/html&gt;    
 </code></pre>
@@ -155,7 +164,7 @@ brown data.master, data
 
 <p>Arrays here you go</p>
 
-<pre><code>  'div':
+<pre><code>  div:
     ul: 'arr-&gt;li&gt;{ {{.}} }'
     ol: 'arr-&gt;{{.|upper}}'
 </code></pre>
@@ -165,21 +174,36 @@ brown data.master, data
 <p>For more info see the info above or the <a href="https://github.com/coderofsalvation/brown/blob/master/test/test.js">tests</a></p>
 
 <h1>
-<a id="browser-usage" class="anchor" href="#browser-usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Browser usage</h1>
+<a id="global-functions-and-filters" class="anchor" href="#global-functions-and-filters" aria-hidden="true"><span class="octicon octicon-link"></span></a>global functions and filters</h1>
 
-<pre><code>&lt;script type='text/javascript' src='brown.min.js'&gt;&lt;/script&gt;
-&lt;script&gt;
-  brown = require('brown');
-  html = brown.parse( {"div":"{{foo}}"}, {foo:"bar"} )
-  alert(html);
-&lt;/script&gt;
+<p>Easy, just use extend (<code>npm install extend</code>).</p>
+
+<pre><code>global = 
+  somefilter: (str) -&gt; str.toUpperCase()
+  projectname: () -&gt; return "myprojectname"
+
+unique =
+  welcome: "hello"
+
+json = 
+  div:
+    span: '{{welcome}} {{projectname()|somefilter}}'
+
+console.log brown json, extend global, unique
+</code></pre>
+
+<h3>
+<a id="output-2" class="anchor" href="#output-2" aria-hidden="true"><span class="octicon octicon-link"></span></a>output</h3>
+
+<pre><code>&lt;div&gt;&lt;span&gt;hello MYPROJECTNAME&lt;/span&gt;&lt;/div&gt;
 </code></pre>
 
 <h1>
 <a id="roadmap" class="anchor" href="#roadmap" aria-hidden="true"><span class="octicon octicon-link"></span></a>Roadmap</h1>
 
 <ul>
-<li>global functions and filters</li>
+<li>stability and peace</li>
+<li>prevent javascript event injection as text by using 'onclick' e.g. in json</li>
 </ul>
       </section>
       <footer>
