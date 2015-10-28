@@ -6,6 +6,10 @@ JSON 2 html/xml template engine on steroids
 
     $ npm install brown
 
+or in the browser:
+ 
+    <script type='text/javascript' src='brown.min.js'></script>
+
 then 
 
     brown = require('brown').parse
@@ -67,7 +71,8 @@ then
 
 # Features
 
-* variable substitution using {{variablename}}
+* basic emmet syntax ('a>b' becomes '<a><b></b></a>') [overview here](http://docs.emmet.io/cheat-sheet/)
+* mustache variable substitution using {{variablename}}
 * filter chaining using '|'
 * functions using {{functionname()}}
 * iteration over objects using '->' and {{.keyname}} 
@@ -75,15 +80,6 @@ then
 
 With these basics you can literally do anything. 
 Need more? just use functions and filters. 
-
-# Browser usage 
-
-    <script type='text/javascript' src='brown.min.js'></script>
-    <script>
-      brown = require('brown');
-      html = brown.parse( {"div":"{{foo}}"}, {foo:"bar"} )
-      alert(html);
-    </script>
 
 # nested templates
 
@@ -148,3 +144,4 @@ Easy, just use extend (`npm install extend`).
 # Roadmap
 
 * stability and peace
+* prevent javascript event injection as text by using 'onclick' e.g. in json
