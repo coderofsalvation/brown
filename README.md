@@ -1,6 +1,7 @@
 <h1>ϐrown</h1>
 
-JSON 2 html/xml template engine on steroids
+JSON 2 html/xml template engine on steroids.
+It borrows from JADE, but is jsonfriendly and has syntactical testosterone.
 
 # Usage 
 
@@ -15,8 +16,22 @@ then
     brown = require('brown').parse
 
     json = 
+      ul:
+        li:
+          'a[href="{{url}}"]': "click me"
+    
+    data = { url: "http://turtlesarecool.com" }
+    console.log brown json,data
+
+### outputs
+
+    <ul><li><a href="http://turtlesarecool.com"></li></ul>
+
+# Syntactical testosterone
+
+    json = 
       'div#foo.flop>fieldset>div>span': 
-        ul: 'items->li>a[href="{{.url}}"]>{ {{.label}} }'
+        ul: 'items->li>a[href="{{url}}"]>{ {{.label}} }'
       div: 
         'span>b.foo': '{{foo}}'
         'span>b.bar': '{{func()}}'
@@ -29,11 +44,9 @@ then
       upper: (str) -> str.toUpperCase()
       important: (str) -> "!! "+str
     
-    brown json, data
-
 > NOTE: instead of coffeescript, see the javascript example [here](https://github.com/coderofsalvation/brown/blob/master/test/test.js)
 
-### output
+### outputs
 
     <div id="foo" class="flop">
       <fieldset>
