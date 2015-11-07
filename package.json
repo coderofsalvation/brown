@@ -1,6 +1,6 @@
 {
   "name": "brown",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "hyperfast and minimalistic json2html template engine for node/coffeescript/browser, a mashup between emmet/mustache/json-dsl/smarty",
   "main": "index.js",
   "scripts": {
@@ -10,6 +10,9 @@
   "repository": {
     "type": "git",
     "url": "git+https://coderofsalvation@github.com/coderofsalvation/brown.git"
+  },
+  "bin":{
+    "brown": "cli.js"
   },
   "keywords": [
     "template",

@@ -153,6 +153,11 @@ Easy, just use extend (`npm install extend`).
 
     <div><span>hello MYPROJECTNAME</span></div>
 
+# Commandline util
+
+    $ brown 'a>b'
+
+will output: `<a><b></b></b>`
 
 # Roadmap
 
