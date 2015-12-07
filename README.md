@@ -22,14 +22,16 @@ outputs:
 
 Create a fullfledged template engine by adding functions:
 
-    brown.micromustache.encode = function(key) {
+    brown.micromustache.encode = function(key,type) {
       var html = this[key] || '';
-      return String(html).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      return  type == "html" ?
+              String(html).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;') :
+              html
     };
 
     json = {
       div:
-        'a href="{{href}}" onclick="{{encode:label}}"': "{{label}}"
+        'a href="{{href}}" onclick="{{encode:label:html}}"': "{{label}}"
     };
 
     brown.render( json, {href="/", label:"my \"label\""} )
