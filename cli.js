@@ -2,9 +2,9 @@
 brown = require( __dirname+"/.")
 var data = {}
 if( process.argv.length <3 ){
-  console.log( "Usage: brown <string|jsonstring|jsonfile> [jsonstring|jsonfile]" );
+  console.log( "Usage: brown <string|file> [jsonstring|jsonfile]" );
   console.log( "\nexamples:\n\t$ brown 'foo {{foo}}' '{\"foo\":\"world\"}'");
-  console.log( "\t$ brown html.json data.json\n\t$ brown html.json '{\"foo\":\"world\"}'");
+  console.log( "\t$ brown foo.html data.json\n\t$ brown html.json '{\"foo\":\"world\"}'");
   process.exit()
 }
 
@@ -19,7 +19,5 @@ function get(input){
 }
 var input = get(process.argv[2]);
 var data  = get(process.argv[3] || '');
-console.dir(input);
-console.dir(data);
 
 console.log( brown.render( input, data ) );

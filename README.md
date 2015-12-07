@@ -77,12 +77,11 @@ Simple, by just monkeypatching ϐrown with [json-dsl](https://npmjs.org/package/
 Use as a commandline generator (install using `npm install -g` ) :
 
       $ brown
-        Usage: brown <string|jsonstring|jsonfile> [jsonstring|jsonfile]
+        Usage: brown <string|file> [jsonstring|jsonfile]
 
       examples:
               $ brown 'foo {{foo}}' '{"foo":"world"}'
-              $ brown html.json data.json
-              $ brown html.json '{"foo":"world"}'
+              $ brown foo.html data.json
 
 # Goals / Philosophy
 
