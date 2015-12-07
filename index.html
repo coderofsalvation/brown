@@ -33,7 +33,7 @@
         <h1>
 <a id="ϐrown" class="anchor" href="#%CF%90rown" aria-hidden="true"><span class="octicon octicon-link"></span></a>ϐrown</h1>
 
-<p>JSON 2 html/xml template engine on steroids</p>
+<p>Jade-ish + Mustache-ish template engine on steroids in 846 gzipped kilobytes</p>
 
 <h1>
 <a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h1>
@@ -46,164 +46,111 @@
 <pre><code>&lt;script type='text/javascript' src='brown.min.js'&gt;&lt;/script&gt;
 </code></pre>
 
-<p>then </p>
+<h2>
+<a id="simple" class="anchor" href="#simple" aria-hidden="true"><span class="octicon octicon-link"></span></a>Simple</h2>
 
-<pre><code>brown = require('brown').parse
+<pre><code>brown.render( "hello {{foo}}", { foo: "world" } );
+</code></pre>
 
-json = 
-  'div#foo.flop&gt;fieldset&gt;div&gt;span': 
-    ul: 'items-&gt;li&gt;a[href="{{.url}}"]&gt;{ {{.label}} }'
-  div: 
-    'span&gt;b.foo': '{{foo}}'
-    'span&gt;b.bar': '{{func()}}'
-    'span&gt;b.pip': '{{foo|upper|important}}'
+<p>outputs:</p>
 
-data = 
-  items: [{label:'one', url:"/"},{label:'two',url:'/two'}]
-  foo: "hello world"
-  func: () -&gt; @.foo + " foobar"
-  upper: (str) -&gt; str.toUpperCase()
-  important: (str) -&gt; "!! "+str
+<pre><code>hello world
+</code></pre>
 
-brown json, data
+<h2>
+<a id="functions" class="anchor" href="#functions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Functions</h2>
+
+<p>Create a fullfledged template engine by adding functions:</p>
+
+<pre><code>brown.micromustache.encode = function(key,type) {
+  var html = this[key] || '';
+  return  type == "html" ?
+          String(html).replace(/&amp;/g, '&amp;amp;').replace(/"/g, '&amp;quot;').replace(/'/g, '&amp;#39;').replace(/&lt;/g, '&amp;lt;').replace(/&gt;/g, '&amp;gt;') :
+          html
+};
+
+json = {
+  div:
+    'a href="{{href}}" onclick="{{encode:label:html}}"': "{{label}}"
+};
+
+brown.render( json, {href="/", label:"my \"label\""} )
+</code></pre>
+
+<p>outputs:</p>
+
+<pre><code>&lt;div&gt;
+  &lt;ul&gt;
+    &lt;li&gt;
+      &lt;a href="/" onclick="my &amp;quot;label&amp;quot;"&gt;my "label"&lt;/a&gt;
+    &lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;
 </code></pre>
 
 <blockquote>
-<p>NOTE: instead of coffeescript, see the javascript example <a href="https://github.com/coderofsalvation/brown/blob/master/test/test.js">here</a></p>
+<p>Need more? See <a href="https://gist.github.com/coderofsalvation/93610d527c7b8534567f">if/foreach/filter/etc examples here</a> on how to extend brown with <a href="https://www.npmjs.com/package/micromustache">micromustache</a> functions.</p>
 </blockquote>
 
-<h3>
-<a id="output" class="anchor" href="#output" aria-hidden="true"><span class="octicon octicon-link"></span></a>output</h3>
+<h2>
+<a id="generate-jade-ish-xmlhtml-from-jade-ish-json" class="anchor" href="#generate-jade-ish-xmlhtml-from-jade-ish-json" aria-hidden="true"><span class="octicon octicon-link"></span></a>Generate JADE-ish xml/html from JADE-ish json</h2>
 
-<pre><code>&lt;div id="foo" class="flop"&gt;
-  &lt;fieldset&gt;
-    &lt;div&gt;
-      &lt;span&gt;
-        &lt;ul&gt;
-          &lt;li&gt;
-            &lt;a href="/"&gt; one &lt;/a&gt;
-          &lt;/li&gt;
-          &lt;li&gt;
-            &lt;a href="/two"&gt; two &lt;/a&gt;
-          &lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/span&gt;
-    &lt;/div&gt;
-  &lt;/fieldset&gt;
-&lt;/div&gt;
-&lt;div&gt;
-  &lt;span&gt;
-    &lt;b class="foo"&gt;hello world&lt;/b&gt;
-  &lt;/span&gt;
-  &lt;span&gt;
-    &lt;b class="bar"&gt;hello world foobar&lt;/b&gt;
-  &lt;/span&gt;
-  &lt;span&gt;
-    &lt;b class="pipe"&gt;!! HELLO WORLD&lt;/b&gt;
-  &lt;/span&gt;
-&lt;/div&gt;
+<p>ϐrown can be monkeypatched, to automatically produce xml-trees from json (like JADE):</p>
+
+<pre><code>var json = {
+  ul: {
+    li: {
+      'a href="{{foo}}": "Click me"
+    }
+  }
+}
+brown.render json,{ foo: "/" }
+</code></pre>
+
+<p>outputs:</p>
+
+<pre><code>&lt;ul&gt;
+  &lt;li&gt;
+    &lt;a href="/"&gt;Click me &lt;/a&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+</code></pre>
+
+<p>How? 
+Simple, by just monkeypatching ϐrown with <a href="https://npmjs.org/package/json-dsl">json-dsl</a>. See <a href="test/jadeish.coffee">coffeescript</a> / <a href="test/jadeish.js">JS</a> examples.</p>
+
+<h2>
+<a id="commandline-util" class="anchor" href="#commandline-util" aria-hidden="true"><span class="octicon octicon-link"></span></a>Commandline util</h2>
+
+<p>Use as a commandline generator (install using <code>npm install -g</code> ) :</p>
+
+<pre><code>  $ brown
+    Usage: brown &lt;string|file&gt; [jsonstring|jsonfile]
+
+  examples:
+          $ brown 'foo {{foo}}' '{"foo":"world"}'
+          $ brown foo.html data.json
 </code></pre>
 
 <h1>
-<a id="philosophy" class="anchor" href="#philosophy" aria-hidden="true"><span class="octicon octicon-link"></span></a>Philosophy</h1>
-
-<p>ϐrown wants to be very fast an minimal, therefore uses <a href="https://npmjs.com/packages/json-dsl">json-dsl</a>.
-ϐrown combines ideas from smarty, mustache and emmet/zencoding.
-ϐrown focuses on json and json-portability instead of text (smarty/mustache) or introducing a new syntax which require lexicalscanner/parsertree-bloat (jade,coffeecup,haml etc).</p>
-
-<h1>
-<a id="features" class="anchor" href="#features" aria-hidden="true"><span class="octicon octicon-link"></span></a>Features</h1>
+<a id="goals--philosophy" class="anchor" href="#goals--philosophy" aria-hidden="true"><span class="octicon octicon-link"></span></a>Goals / Philosophy</h1>
 
 <ul>
-<li>basic emmet syntax ('a&gt;b' becomes '<b></b>') <a href="http://docs.emmet.io/cheat-sheet/">overview here</a>
-</li>
-<li>mustache variable substitution using {{variablename}}</li>
-<li>filter chaining using '|'</li>
-<li>functions using {{functionname()}}</li>
-<li>iteration over objects using '-&gt;' and {{.keyname}} </li>
-<li>iteration over arrays using '-&gt;' and {{.}}</li>
+<li>lightweight and extendable </li>
+<li>mustache without the noise (using <a href="https://www.npmjs.com/package/micromustache">micromustache</a>)</li>
 </ul>
 
-<p>With these basics you can literally do anything. 
-Need more? just use functions and filters. </p>
-
-<h1>
-<a id="nested-templates" class="anchor" href="#nested-templates" aria-hidden="true"><span class="octicon octicon-link"></span></a>nested templates</h1>
-
-<p>Want master templates?
-Easy, you can call brown inside brown.</p>
-
-<pre><code>data = 
-  master:
-    html: 
-      head: ''
-      body:
-        'div#main': '{{content()}}'
-  page:
-    'ul#menu':
-      div: "{{foo}}"
-  data:
-    foo: "hello world"
-  content: () -&gt; brown @.page, @.data
-
-brown data.master, data
-</code></pre>
+<p>With these basics you can literally do anything. </p>
 
 <blockquote>
-<p>NOTE: instead of coffeescript, see the javascript example <a href="https://github.com/coderofsalvation/brown/blob/master/test/mastertemplate.js">here</a></p>
+<p>Need more? See <a href="https://gist.github.com/coderofsalvation/93610d527c7b8534567f">more examples here</a> on how to extend brown with <a href="https://www.npmjs.com/package/micromustache">micromustache</a> functions.</p>
 </blockquote>
-
-<h3>
-<a id="output-1" class="anchor" href="#output-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>output</h3>
-
-<pre><code>&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;&lt;div id="main"&gt;&lt;ul id="menu"&gt;&lt;div&gt;hello world&lt;/div&gt;&lt;/ul&gt;&lt;/div&gt;&lt;/body&gt;&lt;/html&gt;&lt;/body&gt;&lt;/head&gt;&lt;/html&gt;    
-</code></pre>
-
-<h1>
-<a id="traversing-arraysobjects" class="anchor" href="#traversing-arraysobjects" aria-hidden="true"><span class="octicon octicon-link"></span></a>traversing arrays/objects</h1>
-
-<p>Arrays here you go</p>
-
-<pre><code>  div:
-    ul: 'arr-&gt;li&gt;{ {{.}} }'
-    ol: 'arr-&gt;{{.|upper}}'
-</code></pre>
-
-<p>And for objects just reference the keys like so: <code>{{.keyname}}</code></p>
-
-<p>For more info see the info above or the <a href="https://github.com/coderofsalvation/brown/blob/master/test/test.js">tests</a></p>
-
-<h1>
-<a id="global-functions-and-filters" class="anchor" href="#global-functions-and-filters" aria-hidden="true"><span class="octicon octicon-link"></span></a>global functions and filters</h1>
-
-<p>Easy, just use extend (<code>npm install extend</code>).</p>
-
-<pre><code>global = 
-  somefilter: (str) -&gt; str.toUpperCase()
-  projectname: () -&gt; return "myprojectname"
-
-unique =
-  welcome: "hello"
-
-json = 
-  div:
-    span: '{{welcome}} {{projectname()|somefilter}}'
-
-console.log brown json, extend global, unique
-</code></pre>
-
-<h3>
-<a id="output-2" class="anchor" href="#output-2" aria-hidden="true"><span class="octicon octicon-link"></span></a>output</h3>
-
-<pre><code>&lt;div&gt;&lt;span&gt;hello MYPROJECTNAME&lt;/span&gt;&lt;/div&gt;
-</code></pre>
 
 <h1>
 <a id="roadmap" class="anchor" href="#roadmap" aria-hidden="true"><span class="octicon octicon-link"></span></a>Roadmap</h1>
 
 <ul>
 <li>stability and peace</li>
-<li>prevent javascript event injection as text by using 'onclick' e.g. in json</li>
 </ul>
       </section>
       <footer>
