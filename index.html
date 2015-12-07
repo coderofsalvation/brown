@@ -33,7 +33,7 @@
         <h1>
 <a id="ϐrown" class="anchor" href="#%CF%90rown" aria-hidden="true"><span class="octicon octicon-link"></span></a>ϐrown</h1>
 
-<p>Jade-ish + Mustache-ish template engine on steroids in 846 gzipped kilobytes</p>
+<p>Mustache-ish but clean template engine on steroids in 846 gzipped kilobytes</p>
 
 <h1>
 <a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h1>
@@ -90,8 +90,11 @@ brown.render( 'a href="{{href}}" onclick="{{encode:label:html}}"': "{{label}}", 
 &lt;/div&gt;
 </code></pre>
 
+<h2>
+<a id="if--else--looping" class="anchor" href="#if--else--looping" aria-hidden="true"><span class="octicon octicon-link"></span></a>If / Else / Looping</h2>
+
 <blockquote>
-<p>Need more? See <a href="https://gist.github.com/coderofsalvation/93610d527c7b8534567f">if/foreach/filter/etc examples here</a> on how to extend brown with <a href="https://www.npmjs.com/package/micromustache">micromustache</a> functions.</p>
+<p>Need more? See <a href="https://www.npmjs.com/package/brown-ext-basic">brown-ext-basic for if/foreach/filter/loop-functionality</a>.</p>
 </blockquote>
 
 <h2>
@@ -136,14 +139,20 @@ Simple, by just monkeypatching ϐrown with <a href="https://npmjs.org/package/js
 
 <ul>
 <li>lightweight and extendable </li>
-<li>mustache without the noise (using <a href="https://www.npmjs.com/package/micromustache">micromustache</a>)</li>
+<li>mustache without the noise and weight (mustache is a whopping 97k and pretty slow)</li>
 </ul>
 
-<p>With these basics you can literally do anything. </p>
+<p>With ϐrown as a fundament you can literally do anything. </p>
 
-<blockquote>
-<p>Need more? See <a href="https://gist.github.com/coderofsalvation/93610d527c7b8534567f">more examples here</a> on how to extend brown with <a href="https://www.npmjs.com/package/micromustache">micromustache</a> functions.</p>
-</blockquote>
+<h1>
+<a id="extentions" class="anchor" href="#extentions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Extentions</h1>
+
+<ul>
+<li>
+<a href="https://www.npmjs.com/package/brown-ext-basic">brown-ext-basic</a> template functions suite</li>
+<li>
+<a href="https://www.npmjs.com/package/brown-express">brown-express</a> middleware</li>
+</ul>
 
 <h1>
 <a id="roadmap" class="anchor" href="#roadmap" aria-hidden="true"><span class="octicon octicon-link"></span></a>Roadmap</h1>
