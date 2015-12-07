@@ -1,28 +1,11 @@
-brown = require('./../index.coffee').parse
+brown = require('../index.coffee')
 
-json = 
-  div: 
-    'span>b.foo': '{{foo}}'
-    'span>b.bar': '{{func()}}'
-    'span>b.pipe': '{{foo|upper|important}}'
-    'div#foo.flop>fieldset>div>span': 
-      ul: 'items->li>a[href="{{.url}}"]>{ {{.label|upper}} }'
-    'div':
-      ul: 'arr->li>{ {{.}} }'
-      ol: 'arr->{{.|upper}}'
+console.log brown.render "hello {{foo}}", {foo:"world"}
 
-data = 
-  items: [{label:'one', url:"/"},{label:'two',url:'/two'}]
-  arr: [1,2,"three"] 
-  foo: "hello world"
-  func: () -> @.foo + " foobar"
-  upper: (str) -> str.toUpperCase()
-  important: (str) -> "!! "+str
-      
-console.log JSON.stringify json,null,2
-console.log brown json, data
+brown.micromustache.encode = (key) ->
+  html = @[key] || ''
+  String(html).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace />/g, '&gt;'
 
-json = 
-  div: "items->li{{.}}"
-data = 
-  items: [{label:'one', url:"/"},{label:'two',url:'/two'}]
+data = {href:"/",label:"my \"label\""}
+str  = '<a href="{{href}}" onclick="{{encode:label}}">foo</a>'
+console.log brown.render str,data

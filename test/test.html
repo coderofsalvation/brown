@@ -1,6 +1,6 @@
     <script type='text/javascript' src='../brown.min.js'></script>
     <script>
       brown = require('brown');
-      html = brown.parse( {"div":"{{foo}}"}, {foo:"bar"} )
+      html = brown.render( {"div":"{{foo}}"}, {foo:"bar"} )
       alert(html);
     </script>

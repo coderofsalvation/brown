@@ -1,7 +1,6 @@
 <h1>ϐrown</h1>
 
-JSON 2 html/xml template engine on steroids.
-It borrows from JADE, but is jsonfriendly and has syntactical testosterone.
+Jade-ish + Mustache-ish template engine on steroids in 846 gzipped kilobytes
 
 # Usage 
 
@@ -11,155 +10,86 @@ or in the browser:
  
     <script type='text/javascript' src='brown.min.js'></script>
 
-then 
+## Simple
 
-    brown = require('brown').parse
+    brown.render( "hello {{foo}}", { foo: "world" } );
 
-    json = 
-      ul:
-        li:
-          'a[href="{{url}}"]': "click me"
-    
-    data = { url: "http://turtlesarecool.com" }
-    console.log brown json,data
+outputs:
 
-### outputs
+    hello world
 
-    <ul><li><a href="http://turtlesarecool.com"></li></ul>
+## Functions 
 
-# Syntactical testosterone
+Create a fullfledged template engine by adding functions:
 
-    json = 
-      'div#foo.flop>fieldset>div>span': 
-        ul: 'items->li>a[href="{{url}}"]>{ {{.label}} }'
-      div: 
-        'span>b.foo': '{{foo}}'
-        'span>b.bar': '{{func()}}'
-        'span>b.pip': '{{foo|upper|important}}'
+    brown.micromustache.encode = function(key) {
+      var html = this[key] || '';
+      return String(html).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    };
 
-    data = 
-      items: [{label:'one', url:"/"},{label:'two',url:'/two'}]
-      foo: "hello world"
-      func: () -> @.foo + " foobar"
-      upper: (str) -> str.toUpperCase()
-      important: (str) -> "!! "+str
-    
-> NOTE: instead of coffeescript, see the javascript example [here](https://github.com/coderofsalvation/brown/blob/master/test/test.js)
+    json = {
+      div:
+        'a href="{{href}}" onclick="{{encode:label}}"': "{{label}}"
+    };
 
-### outputs
+    brown.render( json, {href="/", label:"my \"label\""} )
 
-    <div id="foo" class="flop">
-      <fieldset>
-        <div>
-          <span>
-            <ul>
-              <li>
-                <a href="/"> one </a>
-              </li>
-              <li>
-                <a href="/two"> two </a>
-              </li>
-            </ul>
-          </span>
-        </div>
-      </fieldset>
-    </div>
+outputs:
+
     <div>
-      <span>
-        <b class="foo">hello world</b>
-      </span>
-      <span>
-        <b class="bar">hello world foobar</b>
-      </span>
-      <span>
-        <b class="pipe">!! HELLO WORLD</b>
-      </span>
+      <ul>
+        <li>
+          <a href="/" onclick="my &quot;label&quot;">my "label"</a>
+        </li>
+      </ul>
     </div>
 
-# Philosophy
+> Need more? See [if/foreach/filter/etc examples here](https://gist.github.com/coderofsalvation/93610d527c7b8534567f) on how to extend brown with [micromustache](https://www.npmjs.com/package/micromustache) functions.
 
-ϐrown wants to be very fast an minimal, therefore uses [json-dsl](https://npmjs.com/packages/json-dsl).
-ϐrown combines ideas from smarty, mustache and emmet/zencoding.
-ϐrown focuses on json and json-portability instead of text (smarty/mustache) or introducing a new syntax which require lexicalscanner/parsertree-bloat (jade,coffeecup,haml etc).
+## Generate JADE-ish xml/html from JADE-ish json
 
-# Features
+ϐrown can be monkeypatched, to automatically produce xml-trees from json (like JADE):
 
-* basic emmet syntax ('a>b' becomes '<a><b></b></a>') [overview here](http://docs.emmet.io/cheat-sheet/)
-* mustache variable substitution using {{variablename}}
-* filter chaining using '|'
-* functions using {{functionname()}}
-* iteration over objects using '->' and {{.keyname}} 
-* iteration over arrays using '->' and {{.}}
+    var json = {
+      ul: {
+        li: {
+          'a href="{{foo}}": "Click me"
+        }
+      }
+    }
+    brown.render json,{ foo: "/" }
+
+outputs:
+
+    <ul>
+      <li>
+        <a href="/">Click me </a>
+      </li>
+    </ul>
+
+How? 
+Simple, by just monkeypatching ϐrown with [json-dsl](https://npmjs.org/package/json-dsl). See [coffeescript](test/jadeish.coffee) / [JS](test/jadeish.js) examples.
+
+## Commandline util
+
+Use as a commandline generator (install using `npm install -g` ) :
+
+      $ brown
+        Usage: brown <string|jsonstring|jsonfile> [jsonstring|jsonfile]
+
+      examples:
+              $ brown 'foo {{foo}}' '{"foo":"world"}'
+              $ brown html.json data.json
+              $ brown html.json '{"foo":"world"}'
+
+# Goals / Philosophy
+
+* lightweight and extendable 
+* mustache without the noise (using [micromustache](https://www.npmjs.com/package/micromustache))
 
 With these basics you can literally do anything. 
-Need more? just use functions and filters. 
-
-# nested templates
-
-Want master templates?
-Easy, you can call brown inside brown.
-
-    data = 
-      master:
-        html: 
-          head: ''
-          body:
-            'div#main': '{{content()}}'
-      page:
-        'ul#menu':
-          div: "{{foo}}"
-      data:
-        foo: "hello world"
-      content: () -> brown @.page, @.data
-
-    brown data.master, data
-
-> NOTE: instead of coffeescript, see the javascript example [here](https://github.com/coderofsalvation/brown/blob/master/test/mastertemplate.js)
-
-### output    
-
-    <html><head></head><body><div id="main"><ul id="menu"><div>hello world</div></ul></div></body></html></body></head></html>    
-
-# traversing arrays/objects
-
-Arrays here you go
-
-      div:
-        ul: 'arr->li>{ {{.}} }'
-        ol: 'arr->{{.|upper}}'
-
-And for objects just reference the keys like so: `{{.keyname}}`
-
-For more info see the info above or the [tests](https://github.com/coderofsalvation/brown/blob/master/test/test.js)
-
-# global functions and filters 
-
-Easy, just use extend (`npm install extend`).
-
-    global = 
-      somefilter: (str) -> str.toUpperCase()
-      projectname: () -> return "myprojectname"
-
-    unique =
-      welcome: "hello"
-
-    json = 
-      div:
-        span: '{{welcome}} {{projectname()|somefilter}}'
-
-    console.log brown json, extend global, unique
-
-### output
-
-    <div><span>hello MYPROJECTNAME</span></div>
-
-# Commandline util
-
-    $ brown 'a>b'
-
-will output: `<a><b></b></b>`
+> Need more? See [more examples here](https://gist.github.com/coderofsalvation/93610d527c7b8534567f) on how to extend brown with [micromustache](https://www.npmjs.com/package/micromustache) functions.
 
 # Roadmap
 
 * stability and peace
-* prevent javascript event injection as text by using 'onclick' e.g. in json
