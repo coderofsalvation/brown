@@ -49,7 +49,11 @@
 <h2>
 <a id="simple" class="anchor" href="#simple" aria-hidden="true"><span class="octicon octicon-link"></span></a>Simple</h2>
 
-<pre><code>brown.render( "hello {{foo}}", { foo: "world" } );
+<pre><code>brown.render( "hello {{foo.bar}}", { 
+  foo: {
+    bar: "world" 
+  } 
+});
 </code></pre>
 
 <p>outputs:</p>
@@ -62,19 +66,17 @@
 
 <p>Create a fullfledged template engine by adding functions:</p>
 
-<pre><code>brown.micromustache.encode = function(key,type) {
+<pre><code>brown.encode = function(key,type) {
   var html = this[key] || '';
   return  type == "html" ?
           String(html).replace(/&amp;/g, '&amp;amp;').replace(/"/g, '&amp;quot;').replace(/'/g, '&amp;#39;').replace(/&lt;/g, '&amp;lt;').replace(/&gt;/g, '&amp;gt;') :
           html
 };
 
-json = {
-  div:
-    'a href="{{href}}" onclick="{{encode:label:html}}"': "{{label}}"
-};
-
-brown.render( json, {href="/", label:"my \"label\""} )
+brown.render( 'a href="{{href}}" onclick="{{encode:label:html}}"': "{{label}}", {
+  href="/", 
+  label:"my \"label\""} 
+});
 </code></pre>
 
 <p>outputs:</p>
@@ -93,17 +95,14 @@ brown.render( json, {href="/", label:"my \"label\""} )
 </blockquote>
 
 <h2>
-<a id="generate-jade-ish-xmlhtml-from-jade-ish-json" class="anchor" href="#generate-jade-ish-xmlhtml-from-jade-ish-json" aria-hidden="true"><span class="octicon octicon-link"></span></a>Generate JADE-ish xml/html from JADE-ish json</h2>
+<a id="generate-xmlhtml-from-jsonportable-jade" class="anchor" href="#generate-xmlhtml-from-jsonportable-jade" aria-hidden="true"><span class="octicon octicon-link"></span></a>Generate xml/html from jsonportable JADE</h2>
 
-<p>ϐrown can be monkeypatched, to automatically produce xml-trees from json (like JADE):</p>
+<p>ϐrown can be monkeypatched, to automatically produce xml-trees from json (like JADE), see this coffeescript example:</p>
 
-<pre><code>var json = {
-  ul: {
-    li: {
-      'a href="{{foo}}": "Click me"
-    }
-  }
-}
+<pre><code>json = 
+  ul: 
+    li: 'a href="{{foo}}": "Click me"
+
 brown.render json,{ foo: "/" }
 </code></pre>
 
