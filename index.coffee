@@ -4,7 +4,10 @@ module.exports = ( () ->
 
   @safe_eval = (str,data) -> 
     str = str.split(':')[0]
-    result = new Function( 'return ( arguments[0].' + str + ')' )(data);
+    try
+      result = new Function( 'return ( arguments[0]["' + str + '"] )' )(data);
+    catch FOO
+      result =  ''
     return result
 
   ###*

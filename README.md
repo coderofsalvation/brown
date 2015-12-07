@@ -48,7 +48,9 @@ outputs:
       </ul>
     </div>
 
-> Need more? See [if/foreach/filter/etc examples here](https://gist.github.com/coderofsalvation/93610d527c7b8534567f) on how to extend brown with [micromustache](https://www.npmjs.com/package/micromustache) functions.
+## If / Else / Looping
+
+> Need more? See [brown-ext-basic for if/foreach/filter/loop-functionality](https://www.npmjs.com/package/brown-ext-basic).
 
 ## Generate xml/html from jsonportable JADE
 
@@ -85,10 +87,13 @@ Use as a commandline generator (install using `npm install -g` ) :
 # Goals / Philosophy
 
 * lightweight and extendable 
-* mustache without the noise (using [micromustache](https://www.npmjs.com/package/micromustache))
+* mustache without the noise and weight (mustache is a whopping 97k and pretty slow)
 
-With these basics you can literally do anything. 
-> Need more? See [more examples here](https://gist.github.com/coderofsalvation/93610d527c7b8534567f) on how to extend brown with [micromustache](https://www.npmjs.com/package/micromustache) functions.
+With ϐrown as a fundament you can literally do anything. 
+
+# Extentions & Dependents
+
+* [brown-ext-basic](https://www.npmjs.com/package/brown-ext-basic).
 
 # Roadmap
 
