@@ -91,9 +91,10 @@ Use as a commandline generator (install using `npm install -g` ) :
 
 With ϐrown as a fundament you can literally do anything. 
 
-# Extentions & Dependents
+# Extentions
 
-* [brown-ext-basic](https://www.npmjs.com/package/brown-ext-basic).
+* [brown-ext-basic](https://www.npmjs.com/package/brown-ext-basic) template functions suite
+* [brown-express](https://www.npmjs.com/package/brown-express) middleware
 
 # Roadmap
 
