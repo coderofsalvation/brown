@@ -4,10 +4,12 @@
     var me;
     me = this;
     this.safe_eval = function(str, data) {
-      var FOO, result;
+      var FOO, evalstr, result;
       str = str.split(':')[0];
+      result = "";
       try {
-        result = new Function('return ( arguments[0]["' + str + '"] )')(data);
+        evalstr = (!str.match(/\./) ? '["' + str + '"]' : '.' + str);
+        result = new Function('return ( arguments[0]' + evalstr + ' )')(data);
       } catch (_error) {
         FOO = _error;
         result = '';

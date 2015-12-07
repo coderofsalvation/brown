@@ -3,9 +3,10 @@ module.exports = ( () ->
   me = @
 
   @safe_eval = (str,data) -> 
-    str = str.split(':')[0]
+    str = str.split(':')[0] ; result = ""
     try
-      result = new Function( 'return ( arguments[0]["' + str + '"] )' )(data);
+      evalstr = ( if not str.match(/\./) then '["'+str+'"]' else '.'+str )
+      result = new Function( 'return ( arguments[0]'+evalstr+' )' )(data);
     catch FOO
       result =  ''
     return result
