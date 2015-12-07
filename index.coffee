@@ -1,28 +1,37 @@
 module.exports = ( () ->
 
-  merge = @merge = (source, obj, clone) ->
-    return source if source == null or not source?
-    for prop of obj
-      v = obj[prop]
-      if source[prop] != null and typeof source[prop] == 'object' and typeof obj[prop] == 'object'
-        @merge source[prop], obj[prop]
-      else
-        if clone
-          source[prop] = @clone
+  me = @
+
+  @safe_eval = (str,data) -> 
+    str = str.split(':')[0]
+    result = new Function( 'return ( arguments[0].' + str + ')' )(data);
+    return result
+
+  ###*
+  # Replaces every {{variable}} inside the template with values provided by data
+  # If the value is a function, call it passing the name of the variable as the only argument.
+  # @param template {string} the template containing one or more {{key}}
+  # @param data {object} an object containing string (or number) values for every key that is used in the template
+  # @return {string} template with its valid variable names replaced with corresponding values
+  ###
+
+  @render = (template, data) ->
+    return template if typeof template != 'string'
+    # if data is not a valid object, assume it is an empty object which effectively removes all variable assignments
+    data = {} if typeof data != 'object' or data == null
+    data[k] = v for k,v of me
+    template.replace /\{?\{\{\s*(.*?)\s*\}\}\}?/g, (match, varName) ->
+      value = data[varName] || data[ varName.split(':')[0] ] || me.safe_eval varName, data 
+      switch typeof value
+        when 'string', 'number', 'boolean'
+          return value
+        when 'function'
+          #if the value is a function, call it passing the variable name
+          return value.apply(data, varName.split(':').slice(1))
         else
-          source[prop] = obj[prop]
-    source
-
-  @micromustache = require 'micromustache'
-  @micromustache._render = @micromustache.render
-  @micromustache.render = ( (str,data) ->
-    @._render str, merge(data, @ )
-  ).bind(@micromustache)
-
-  @render = (input,data) ->
-    return @micromustache.render input,data 
-
-  ( @[k] = v.bind(@) if typeof v is 'function' ) for k,v of @ # me = this
+          #anything else will be replaced with an empty string. This includes object, array, date, regexp and null.
+          return ''
+      return
 
   @
 

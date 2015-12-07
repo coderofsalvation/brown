@@ -1,26 +1,27 @@
 brown = require './../.'
 
 jdsl   = require 'json-dsl'
-extend = require 'extend'
+jdsl.parseKey   = (key,data) -> 
+  data[k] = v for k,v of brown
+  key = brown._render key, data
+  if key[0] != '<' then "<"+key+">%s</"+key.split(' ')[0]+">" else key+"%s"
+jdsl.parseValue = (value,data) ->
+  data[k] = v for k,v of brown
+  brown._render value, data
 
-jdsl.parseKey   = (k,data) -> 
-  k = brown.micromustache.render k, extend( brown.micromustache,data)
-  if k[0] != '<' then "<"+k+">%s</"+k.split(' ')[0]+">" else k+"%s"
-
-jdsl.parseValue = (v,data) ->
-  brown.micromustache.render v, extend( brown.micromustache, data)
-
-brown.micromustache.encode = (key) ->
+brown.encode = (key) ->
   html = @[key] || ''
   String(html).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace />/g, '&gt;'
 
+brown._render = brown.render 
 brown.render = (input,data) ->
   jdsl.parse input,data
 
-console.dir Object.keys(brown.micromustache)
-
 json =
-  ul:
+  ul: 
+    foo: "bar"
+    li:
+      'a href="{{href}}" onclick="{{encode:label}}"': "{{label}}"
     li:
       'a href="{{href}}" onclick="{{encode:label}}"': "{{label}}"
 

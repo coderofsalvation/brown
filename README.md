@@ -12,7 +12,11 @@ or in the browser:
 
 ## Simple
 
-    brown.render( "hello {{foo}}", { foo: "world" } );
+    brown.render( "hello {{foo.bar}}", { 
+      foo: {
+        bar: "world" 
+      } 
+    });
 
 outputs:
 
@@ -22,19 +26,17 @@ outputs:
 
 Create a fullfledged template engine by adding functions:
 
-    brown.micromustache.encode = function(key,type) {
+    brown.encode = function(key,type) {
       var html = this[key] || '';
       return  type == "html" ?
               String(html).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;') :
               html
     };
 
-    json = {
-      div:
-        'a href="{{href}}" onclick="{{encode:label:html}}"': "{{label}}"
-    };
-
-    brown.render( json, {href="/", label:"my \"label\""} )
+    brown.render( 'a href="{{href}}" onclick="{{encode:label:html}}"': "{{label}}", {
+      href="/", 
+      label:"my \"label\""} 
+    });
 
 outputs:
 
@@ -48,17 +50,14 @@ outputs:
 
 > Need more? See [if/foreach/filter/etc examples here](https://gist.github.com/coderofsalvation/93610d527c7b8534567f) on how to extend brown with [micromustache](https://www.npmjs.com/package/micromustache) functions.
 
-## Generate JADE-ish xml/html from JADE-ish json
+## Generate xml/html from jsonportable JADE
 
-ϐrown can be monkeypatched, to automatically produce xml-trees from json (like JADE):
+ϐrown can be monkeypatched, to automatically produce xml-trees from json (like JADE), see this coffeescript example:
 
-    var json = {
-      ul: {
-        li: {
-          'a href="{{foo}}": "Click me"
-        }
-      }
-    }
+    json = 
+      ul: 
+        li: 'a href="{{foo}}": "Click me"
+    
     brown.render json,{ foo: "/" }
 
 outputs:
