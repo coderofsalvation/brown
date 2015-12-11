@@ -87,9 +87,27 @@ Use as a commandline generator (install using `npm install -g` ) :
 # Goals / Philosophy
 
 * lightweight and extendable 
+* monkeypatchable syntax
 * mustache without the noise and weight (mustache is a whopping 97k and pretty slow)
 
-With ϐrown as a fundament you can literally do anything. 
+I got a lot of projects using mustache.
+The mustache syntax can easily get really noisy, and annoying because of absense of function arguments.
+Brown is a way to slowly abandon the noisy syntax, and replace it with readable functions.
+
+Hence the [brown-ext-basic](https://www.npmjs.com/package/brown-ext-basic) extension to easily convert it to brown syntax:
+
+
+|                    | mustache                                        | brown                                           |
+|--------------------|-------------------------------------------------|-------------------------------------------------|
+| array iteration    | {{#array}} {{.}} {{/array}                      | {{foreach:items:itemtemplate:"no items found"}} |
+| if/else            | {{#foo}}{{foo}}{{/foo}}{{^foo}} no foo {{/foo}} | {{if:foo:foo:"no foo"}}                         |
+| object iteration   | n/a                                             | {{foreach:items:itemtemplate:"no items found"}} |
+| global functions   | n/a                                             | brown.foo = (arg1,arg2) -> return arg1+arg2     |
+| partial            | {{ > templatename }}                            | {{include:templatename}}                        |
+| chaining functions | n/a                                             | {{foo:htmlencode:uppercase}}                    |template functions suite
+| filesize           | 97k                                             | 846 bytes (gzipped)
+
+With ϐrown as a fundament you can literally extend and overload anything. 
 
 # Extentions
 
