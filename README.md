@@ -1,6 +1,7 @@
 <h1>ϐrown</h1>
 
 Mustache-ish but clean template engine on steroids in 846 gzipped kilobytes
+![Build Status](https://travis-ci.org/coderofsalvation/brown.svg?branch=master)
 
 # Usage 
 

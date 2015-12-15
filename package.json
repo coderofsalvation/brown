@@ -4,7 +4,7 @@
   "description": "Ultra-extendable Mustache-ish template engine on steroids in 620 gzipped kilobytes, need nothing more!",
   "main": "index.js",
   "scripts": {
-    "test": "cake test/test.coffee",
+    "test": "cake test",
     "compile_nocompress": "/bin/bash -c 'browserify -r .:brown > brown.js'",
     "compile": "/bin/bash -c 'browserify -r .:brown | uglifyjs -c > brown.min.js'"
   },
